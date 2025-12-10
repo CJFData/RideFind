@@ -1,6 +1,6 @@
 Hello!
 
-RideFind is designed to help transit professionals identify if a start or end of a trip is within the 3/4 mile ADA zone. Whether a trip starts or ends in the 3/4 zone buffer is used for ADA program requirements. it uses Python with the Streamlit Library for the webapp interface, and Folium for the interactive map. 
+RideFind is designed to help transit professionals identify if a start or end of a trip is within the 3/4 mile ADA zone. Whether a trip starts or ends in the 3/4 zone buffer is used for ADA program requirements. it uses Python with the Streamlit Library for the webapp interface, and Folium for the interactive map. Map shapes are uploaded from public GTFS files
 
 First Run Libraryinstall.py to install the necessary libraries to run this. (If you already have all dependencies installed you will not need to run this)
 Then save and Ridefind.py which will initialize the Streamlit webapp on your system.
