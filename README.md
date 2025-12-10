@@ -2,8 +2,8 @@ Hello!
 
 *DISCLAIMER THIS CODE DOES NOT REPLACE ANALYSIS AND FTA OR OTHER GRANTORS CRITERIA, IT DOES NOT ACCOUNT FOR EVERY TRANSIT AUTHORITY'S SITUATION WITH MODES FOR ADA COMPLIANCE REQUIREMENTS. USE OF THIS APP IS AT YOUR OWN DISCRETION. REPORTING AND COMPLIANCE TO FTA POLICY AND OTHER GRANTORS SHOULD BE DONE WITH CLOSE CLOSE REFERENCE TO EACH GRANTORS POLICY MANUALS TO ASSURE FULL COMPLIANCE* 
 
-RideFind can be Run on the Web here:
-https://ridefind.streamlit.app/
+RideFind Start-End can be Run on the Web here:
+https://ridefind-start-end.streamlit.app/
 
 RideFind is designed to help transit professionals identify if a start or end of a trip is within the 3/4 miles of their service network. Whether a trip starts or ends in the 3/4 zone buffer is used for ADA program requirements, _use of this app does not gaurentee full compliance to ADA guidlines_. This app uses Python with the Streamlit Library for the webapp interface, and Folium for the interactive map. Map shapes are uploaded from public GTFS files, all shapes are ploted REGARDLESS OF SERVICE MODE
 
