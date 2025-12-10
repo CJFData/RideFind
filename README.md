@@ -11,7 +11,7 @@ It may be easier to save each of these files as codeblocks in a Jupyter notebook
 1. Upload your GTFS file
 <img width="1385" height="515" alt="image" src="https://github.com/user-attachments/assets/93b157fb-611d-49e6-a3f7-c723d1ee2cd6" />
 
-2. Search the address, if you don't know the full address the app will attempt to autocomplete it, and you can select an uption from the dropdown, 
+2. Search the address, if you don't know the full address the app will attempt to autocomplete it, and you can select an option from the dropdown, 
 be sure to at least have street address and town.
 <img width="1454" height="380" alt="image" src="https://github.com/user-attachments/assets/ce30fb06-f9db-48b4-8e67-a57e04f7b439" />
 
