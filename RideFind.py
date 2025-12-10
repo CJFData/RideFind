@@ -49,42 +49,58 @@ if gtfs_file is not None:
     # -------------------------------
     if "show_map" not in st.session_state:
         st.session_state.show_map = False
-        st.session_state.address_choice = None
-        st.session_state.lat = None
-        st.session_state.lon = None
+
+    for prefix in ["start", "end"]:
+        if f"{prefix}_address" not in st.session_state:
+            st.session_state[f"{prefix}_address"] = None
+            st.session_state[f"{prefix}_lat"] = None
+            st.session_state[f"{prefix}_lon"] = None
 
     # -------------------------------
-    # ADDRESS SEARCH
+    # ADDRESS SEARCH INPUTS
     # -------------------------------
     st.write("### 🔎 Address Search")
-    query = st.text_input("Start typing an address:")
+    start_query = st.text_input("Start Address:")
+    end_query = st.text_input("End Address:")
 
-    if query and len(query) > 3:
-        url = "https://nominatim.openstreetmap.org/search"
-        params = {"q": query, "format": "json", "addressdetails": 1, "limit": 7}
-        resp = requests.get(url, params=params, headers={"User-Agent": "streamlit-ridefind-app"})
-        if resp.ok:
-            results = resp.json()
-            if results:
-                suggestions = [r["display_name"] for r in results]
-                selected = st.selectbox("Select an address:", suggestions)
+    # Function to search addresses via Nominatim
+    def search_address(query):
+        if query and len(query) > 3:
+            url = "https://nominatim.openstreetmap.org/search"
+            params = {"q": query, "format": "json", "addressdetails": 1, "limit": 7}
+            resp = requests.get(url, params=params, headers={"User-Agent": "streamlit-ridefind-app"})
+            if resp.ok:
+                results = resp.json()
+                if results:
+                    suggestions = [r["display_name"] for r in results]
+                    return suggestions, results
+        return [], []
 
-                # Show "Show on Map" button immediately
-                if st.button("Show on Map"):
-                    for r in results:
-                        if r["display_name"] == selected:
-                            st.session_state.address_choice = selected
-                            st.session_state.lat = float(r["lat"])
-                            st.session_state.lon = float(r["lon"])
-                            st.session_state.show_map = True
-                            break
-            else:
-                st.info("No matches found.")
-        else:
-            st.warning("Nominatim API error.")
+    # Search results
+    start_suggestions, start_results = search_address(start_query)
+    end_suggestions, end_results = search_address(end_query)
+
+    # Select boxes
+    selected_start = st.selectbox("Select Start Address:", start_suggestions) if start_suggestions else None
+    selected_end = st.selectbox("Select End Address:", end_suggestions) if end_suggestions else None
 
     # -------------------------------
-    # BUILD MAP ONLY AFTER BUTTON CLICK
+    # SHOW MAP BUTTON
+    # -------------------------------
+    if st.button("Show on Map"):
+        # Save selections to session state
+        for name, results, selected in [("start", start_results, selected_start), ("end", end_results, selected_end)]:
+            if selected:
+                for r in results:
+                    if r["display_name"] == selected:
+                        st.session_state[f"{name}_address"] = selected
+                        st.session_state[f"{name}_lat"] = float(r["lat"])
+                        st.session_state[f"{name}_lon"] = float(r["lon"])
+                        break
+        st.session_state.show_map = True
+
+    # -------------------------------
+    # BUILD MAP
     # -------------------------------
     if st.session_state.show_map:
         m = folium.Map(
@@ -105,25 +121,25 @@ if gtfs_file is not None:
             style_function=lambda x: {"color": "green", "fillOpacity": 0.25}
         ).add_to(m)
 
-        # Add address pin
-        if st.session_state.address_choice:
-            pt = gpd.GeoDataFrame(
-                geometry=[gpd.points_from_xy([st.session_state.lon], [st.session_state.lat])[0]],
-                crs="EPSG:4326"
-            )
-            inside_buffer = pt.within(buffer_union)[0]
+        # Add markers for start and end addresses
+        for prefix in ["start", "end"]:
+            if st.session_state[f"{prefix}_address"]:
+                pt = gpd.GeoDataFrame(
+                    geometry=[gpd.points_from_xy([st.session_state[f"{prefix}_lon"]], [st.session_state[f"{prefix}_lat"]])[0]],
+                    crs="EPSG:4326"
+                )
+                inside_buffer = pt.within(buffer_union)[0]
+                marker_color = "green" if inside_buffer else "red"
+                if inside_buffer:
+                    st.success(f"🏆 {prefix.capitalize()} address is within ¾ mile of the transit network.")
+                else:
+                    st.error(f"❌ {prefix.capitalize()} address is outside the ¾-mile buffer.")
 
-            marker_color = "green" if inside_buffer else "red"
-            if inside_buffer:
-                st.success("🏆 This address is within ¾ mile of the transit network.")
-            else:
-                st.error("❌ This address is outside the ¾-mile buffer.")
-
-            folium.Marker(
-                [st.session_state.lat, st.session_state.lon],
-                popup=st.session_state.address_choice,
-                icon=folium.Icon(color=marker_color)
-            ).add_to(m)
+                folium.Marker(
+                    [st.session_state[f"{prefix}_lat"], st.session_state[f"{prefix}_lon"]],
+                    popup=st.session_state[f"{prefix}_address"],
+                    icon=folium.Icon(color=marker_color)
+                ).add_to(m)
 
         st.write("### 🗺️ Transit Network Map")
         st_folium(m, width=800, height=550)
@@ -136,3 +152,4 @@ if gtfs_file is not None:
             file_name="transit_buffer_map.html",
             mime="text/html"
         )
+
