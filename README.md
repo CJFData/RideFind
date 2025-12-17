@@ -1,30 +1,142 @@
-Hello!
+# 🚍 RideFind Start-End - Transit Network Proximity Checker
 
-*DISCLAIMER THIS CODE DOES NOT REPLACE ANALYSIS AND FTA OR OTHER GRANTORS CRITERIA, IT DOES NOT ACCOUNT FOR EVERY TRANSIT AUTHORITY'S SITUATION WITH MODES FOR ADA COMPLIANCE REQUIREMENTS. USE OF THIS APP IS AT YOUR OWN DISCRETION. REPORTING AND COMPLIANCE TO FTA POLICY AND OTHER GRANTORS SHOULD BE DONE WITH CLOSE CLOSE REFERENCE TO EACH GRANTORS POLICY MANUALS TO ASSURE FULL COMPLIANCE* 
+A Streamlit web application that helps transit professionals determine if trip start and end addresses are within 3/4 mile of their transit service network using GTFS data.
 
-RideFind Start-End can be Run on the Web here:
-https://ridefind-start-end.streamlit.app/
+## ⚠️ Important Disclaimer
 
-RideFind is designed to help transit professionals identify if a start or end of a trip is within the 3/4 miles of their service network. Whether a trip starts or ends in the 3/4 zone buffer is used for ADA program requirements, _use of this app does not gaurentee full compliance to ADA guidlines_. This app uses Python with the Streamlit Library for the webapp interface, and Folium for the interactive map. Map shapes are uploaded from public GTFS files, all shapes are ploted REGARDLESS OF SERVICE MODE
+**THIS CODE DOES NOT REPLACE PROFESSIONAL ANALYSIS OR FTA/OTHER GRANTOR COMPLIANCE REQUIREMENTS.** It does not account for every transit authority's specific situation regarding service modes and ADA compliance requirements. Use of this app is at your own discretion. All reporting and compliance with FTA policy and other grantors should be done with close reference to each grantor's policy manuals to ensure full compliance.
 
-First Run Libraryinstall.py to install the necessary libraries to run this. (If you already have all dependencies installed you will not need to run this)
-Then save and Ridefind.py which will initialize the Streamlit webapp on your system.
-Then Run !streamlit run RideFind.py --server.headless true (RunServer.py) to run the app. 
+## 🚀 Live Demo
 
-It may be easier to save each of these files as codeblocks in a Jupyter notebook instead.
+**Web App**: https://ridefind-start-end.streamlit.app/
 
-1. Upload your GTFS file
+## ✨ Features
+
+- **GTFS File Upload**: Upload your transit agency's GTFS feed
+- **Start and End Address Search**: Check both trip origin and destination addresses
+- **Address Autocomplete**: Smart address completion for easier data entry
+- **Interactive Map**: View your transit network plotted on an interactive Folium map
+- **3/4 Mile Buffer Visualization**: See the ADA-compliant service area buffer around transit routes
+- **Dual Address Markers**: Pinpoint both start and end locations on the map
+- **Downloadable Maps**: Export maps as HTML files for documentation and reporting
+- **All Service Modes**: Plots all shapes from GTFS regardless of service mode
+
+## 📋 Use Case
+
+Whether a trip starts or ends within the 3/4 mile zone buffer is used for ADA program requirements. RideFind Start-End helps transit professionals quickly verify if both trip origins and destinations fall within this service area. *Note: Use of this app does not guarantee full compliance with ADA guidelines.*
+
+## 🛠️ Installation
+
+### Option 1: Use the Web App
+Simply visit https://ridefind-start-end.streamlit.app/ - no installation needed!
+
+### Option 2: Local Installation
+
+1. Clone this repository:
+```bash
+git clone https://github.com/CJFData/RideFind.git
+cd RideFind
+git checkout Start-End
+```
+
+2. Install required packages:
+```bash
+pip install -r requirements.txt
+```
+
+3. Run the application:
+```bash
+streamlit run RideFind.py
+```
+
+4. Open your browser to `http://localhost:8501`
+
+### Option 3: Jupyter Notebook
+
+You can run this as Jupyter notebook cells:
+
+**Cell 1** - Install libraries:
+```python
+!python LibraryInstall.py
+```
+
+**Cell 2** - Run the app:
+```python
+!streamlit run RideFind.py --server.headless true
+```
+
+## 📖 How to Use
+
+### Step 1: Upload GTFS File
+Click the upload button and select your transit agency's GTFS .zip file.
+
 <img width="1385" height="515" alt="image" src="https://github.com/user-attachments/assets/93b157fb-611d-49e6-a3f7-c723d1ee2cd6" />
 
-2. Search the address, if you don't know the full address the app will attempt to autocomplete it, and you can select an option from the dropdown, 
-be sure to at least have street address and town.
+### Step 2: Search Addresses
+Enter the start and/or end addresses you want to check. The app provides autocomplete suggestions - be sure to include at least the street address and town for accurate results.
 <img width="1454" height="380" alt="image" src="https://github.com/user-attachments/assets/ce30fb06-f9db-48b4-8e67-a57e04f7b439" />
 
-3. Click 'Show On Map' and it will plot the Transit network from GTFS and show where the address you searched sits on the map with a green pin
+### Step 3: View on Map
+Click "Show On Map" to plot the transit network from your GTFS file with the 3/4 mile buffer. The searched address(es) appear as green pins on the map.
 
 <img width="1546" height="978" alt="image" src="https://github.com/user-attachments/assets/6fa522f2-43d4-479f-abe1-755575b88fc9" />
 
-Once you are done, you can download this mapped image by clicking 'Download HTML Map'
-
+### Step 4: Download Map (Optional)
+Save the map by clicking "Download HTML Map" for your records or reports.
 <img width="1014" height="487" alt="image" src="https://github.com/user-attachments/assets/8f801b28-fc25-4281-a4ff-4c6847313f52" />
+
+## 📦 Requirements
+
+- Python 3.7+
+- streamlit
+- folium
+- geopandas
+- shapely
+- pandas
+- gtfs-kit (or similar GTFS processing library)
+- geopy (for geocoding)
+
+See `requirements.txt` for full dependencies.
+
+## 🎯 Technical Details
+
+- **GTFS Processing**: Reads shapes.txt from GTFS feeds to plot transit routes
+- **Buffer Calculation**: Creates 3/4 mile (1.207 km) buffers around all transit routes
+- **Geocoding**: Uses address geocoding to pinpoint locations
+- **Mapping**: Interactive Folium maps with OpenStreetMap tiles
+- **Multi-Point Analysis**: Handles both trip start and end locations simultaneously
+- **Export**: Generates standalone HTML map files
+
+## 🔄 Differences from Main Branch
+
+This `Start-End` branch includes enhanced functionality for checking both trip origins and destinations in a single operation, making it ideal for comprehensive trip analysis and ADA compliance verification.
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome! This tool is designed to help transit professionals, and community input helps make it better.
+
+## 📝 License
+
+This project is licensed under the Creative Commons Attribution 4.0 International License (CC BY 4.0) - see the [LICENSE](LICENSE) file for details.
+
+## 👏 Credits
+
+Created by Christian J Ferreira
+
+## 📧 Contact
+
+Christian J Ferreira - [LinkedIn](https://www.linkedin.com/in/christianjferreira/) - data@christianjferreira.com
+
+Project Link: https://github.com/CJFData/RideFind/tree/Start-End
+
+## 🔗 Related Resources
+
+- [FTA ADA Regulations](https://www.transit.dot.gov/regulations-and-guidance/civil-rights-ada/ada-regulations)
+- [GTFS Specification](https://gtfs.org/)
+- [General Transit Feed Specification Reference](https://developers.google.com/transit/gtfs/reference)
+
+---
+
+⭐ If you found this tool helpful for your transit agency, please consider giving it a star!
+
 
